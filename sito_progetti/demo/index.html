@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Koch</title>
+</head>
+<body>
+<canvas id="Canvas" width="800" height="800" style="border: 1px solid black;"></canvas>
+<script>
+const canvas = document.getElementById("Canvas");
+const ctx = canvas.getContext("2d");
+
+// Creo la classe tartaruga per aiutarmi e disegnare sul canvas
+class Tartaruga {
+    // Metodo costruttore
+    constructor(x, y) {
+        this.x = x;
+        this.y = y;
+        this.angolo = 0;
+        this.penna = true;
+    }
+
+    // Metodo per disegnare delle linee
+    avanti(d) {
+        const rad = this.angolo * Math.PI / 180;
+        const nx = this.x + d * Math.cos(rad);
+        const ny = this.y + d * Math.sin(rad);
+
+        // Se la penna è abbassata disegna una linea da x a y
+        if (this.penna) {
+            ctx.beginPath();
+            ctx.moveTo(this.x, this.y);
+            ctx.lineTo(nx, ny);
+            ctx.stroke();
+        }
+
+        this.x = nx;
+        this.y = ny;
+    }
+
+    // Metodo per ruotare 
+    ruota(a) {
+        this.angolo += a;
+    }
+}
+
+// Creo un metodo ricorsivo per creare la curva di Von Koch, proseguendo per livelli(casi in cui si trova la curva)
+function koch(t, lung, livello) {
+    // Parto dal caso base
+    if (livello === 0) {
+        t.avanti(lung);
+    } else {
+        lung = lung / 3;
+        koch(t, lung, livello - 1);
+        t.ruota(-60);
+        koch(t, lung, livello - 1);
+        t.ruota(120);
+        koch(t, lung, livello - 1);
+        t.ruota(-60);
+        koch(t, lung, livello - 1);
+    }
+}
+
+// Creo oggetto tartaruga
+const t = new Tartaruga(200, 300);
+
+// Curva di koch (metà fiocco):
+// koch(t, 400, 4);
+
+// Fiocco di neve di koch
+for(i=0; i<3; i++){
+    koch(t, 400, 4);
+    t.ruota(120);
+}
+</script>
+</body>
+</html>
