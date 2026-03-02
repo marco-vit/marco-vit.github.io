@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Albero Ricorsivo</title>
+</head>
+<body>
+<canvas id="Canvas" width="1900" height="1900" ></canvas>
+<script>
+const canvas = document.getElementById("Canvas");
+const ctx = canvas.getContext("2d");
+
+const width = canvas.width;
+const height = canvas.height;
+
+// Creo la classe tartaruga per aiutarmi a disegnare sul canvas
+class Tartaruga{
+    // Metodo costruttore
+    constructor(x, y){
+        this.x = x;
+        this.y = y;
+        this.angolo = 0;
+        this.penna = true;
+    }
+
+    // Metodo per disegnare delle linee
+    avanti(d){
+        const rad = this.angolo * Math.PI / 180;
+        const nx = this.x + d * Math.cos(rad);
+        const ny = this.y + d * Math.sin(rad);
+        // Se la penna è abbassata disegna una linea da x a y
+        if(this.penna){
+            ctx.beginPath();
+            ctx.moveTo(this.x, this.y);
+            ctx.lineTo(nx, ny);
+            ctx.stroke();
+        }
+        this.x = nx;
+        this.y = ny;
+    }
+
+    // Metodo per ruotare
+    ruota(a){
+        this.angolo += a;
+    }
+}
+
+
+tartaruga = new Tartaruga(0, 1500);
+let lunghezza = width;
+let lunghezzaIniziale = lunghezza / 6;
+let numRicorsioni = 15;
+function disegno(){
+    // Disegno iniziale (base e tronco)
+    tartaruga.avanti(lunghezza);
+    tartaruga.ruota(180);
+    tartaruga.avanti(lunghezza / 2);
+    tartaruga.ruota(90);
+    tartaruga.avanti(lunghezzaIniziale);
+}
+
+function alberoRicorsivo(n, l){
+     if(n === 0){
+        tartaruga.avanti(l);
+        tartaruga.avanti(-l);
+     }else{
+        tartaruga.avanti(l);
+        tartaruga.ruota(30);
+        alberoRicorsivo(n - 1, l / 1.5);
+        tartaruga.ruota(-30);
+        tartaruga.ruota(-30);
+        alberoRicorsivo(n - 1, l / 1.5);
+        tartaruga.ruota(30);
+        tartaruga.avanti(-l);
+     }
+}
+
+
+function main(){
+    disegno();
+    alberoRicorsivo(numRicorsioni, lunghezzaIniziale);
+}
+
+window.addEventListener('load', main);
+
+</script>
+</body>
+</html>
