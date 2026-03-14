@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Successioni Autosomiglianti</title>
+</head>
+<body>
+<canvas id="Canvas" width="800" height="800" style="border: 1px solid black;"></canvas>
+<script>
+const canvas = document.getElementById("Canvas");
+const ctx = canvas.getContext("2d");
+
+const width = canvas.width;
+const height = canvas.height;
+
+// Creo la classe tartaruga per aiutarmi a disegnare sul canvas
+class Tartaruga {
+    // Metodo costruttore
+    constructor(x, y) {
+        this.x = x;
+        this.y = y;
+        this.angolo = 0;
+        this.penna = true;
+    }
+
+    // Metodo per disegnare delle linee
+    avanti(d) {
+        const rad = this.angolo * Math.PI / 180;
+        const nx = this.x + d * Math.cos(rad);
+        const ny = this.y + d * Math.sin(rad);
+        // Se la penna è abbassata disegna una linea da x a y
+        if (this.penna) {
+            ctx.beginPath();
+            ctx.moveTo(this.x, this.y);
+            ctx.lineTo(nx, ny);
+            ctx.stroke();
+        }
+
+        this.x = nx;
+        this.y = ny;
+    }
+
+    // Metodo per ruotare
+    ruota(a) {
+        this.angolo += a;
+    }
+}
+
+function s(i) {
+    if (i === 0) {
+        return 0;
+    }
+    if (i % 2 === 0) {
+        return s(i / 2);
+    } else {
+        return 1 - s(Math.floor(i / 2));
+    }
+}
+
+function disegno(i) {
+    let len = Math.pow(2, i);
+    let tartaruga = new Tartaruga(width / 2, height - 10);  
+    for (let y = 0; y < len; y++) {
+        let val = s(y);
+        if (val === 0) {
+            tartaruga.avanti(4);  
+        } else {
+            tartaruga.ruota(60);  
+        }
+    }
+}
+
+window.addEventListener("load", main);
+
+function main() {
+    disegno(20);
+}
+</script>
+</body>
+</html>

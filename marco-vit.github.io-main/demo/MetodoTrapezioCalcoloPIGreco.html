@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CalcoloNumericoPIgreco</title>
+</head>
+<body>
+<canvas id="Canvas" width="800" height="800" ></canvas>
+<script>
+const canvas = document.getElementById("Canvas");
+const ctx = canvas.getContext("2d");
+
+const width = canvas.width;
+const height = canvas.height;
+
+// Creo la classe tartaruga per aiutarmi a disegnare sul canvas
+class Tartaruga{
+    // Metodo costruttore
+    constructor(x, y){
+        this.x = x;
+        this.y = y;
+        this.angolo = 0;
+        this.penna = true;
+    }
+
+    // Metodo per disegnare delle linee
+    avanti(d){
+        const rad = this.angolo * Math.PI / 180;
+        const nx = this.x + d * Math.cos(rad);
+        const ny = this.y + d * Math.sin(rad);
+        // Se la penna è abbassata disegna una linea da x a y
+        if(this.penna){
+            ctx.beginPath();
+            ctx.moveTo(this.x, this.y);
+            ctx.lineTo(nx, ny);
+            ctx.stroke();
+        }
+        this.x = nx;
+        this.y = ny;
+    }
+
+    // Metodo per ruotare
+    ruota(a){
+        this.angolo += a;
+    }
+}
+
+function CalcoloPIGreco(){
+    let y = 400;
+    let x1 = 400;
+    let y1 = 400;
+    let tartaruga = new Tartaruga(0, y);
+    let raggio = y/2;
+    let nTrapezi = 500;
+    let arrayBasi = new Array(nTrapezi);
+    let PIGreco = 0;
+    arrayBasi[0] = 1;
+    // Disegno grafico e cerchio
+    tartaruga.avanti(800);
+    tartaruga.ruota(180);
+    tartaruga.avanti(400);
+    tartaruga.ruota(90);
+    tartaruga.avanti(400);
+    tartaruga.ruota(180);
+    tartaruga.avanti(800);
+    ctx.beginPath();
+    ctx.arc(x1, y1, raggio, 0, 360); 
+    ctx.stroke();
+    tartaruga.ruota(180);
+    tartaruga.avanti(400);
+    tartaruga.ruota(90);
+    
+    // Disegno trapezi
+    for(let i = 1; i < nTrapezi; i++){
+        arrayBasi[i] = (Math.sqrt((1) - ((Math.pow(i, 2)) / Math.pow(nTrapezi, 2))));
+        tartaruga.avanti(raggio/nTrapezi);
+        tartaruga.ruota(-90);
+        tartaruga.avanti(raggio * Math.sqrt((1) - ((Math.pow(i, 2)) / Math.pow(nTrapezi, 2))));
+        tartaruga.ruota(180);
+        tartaruga.avanti(raggio * Math.sqrt((1) - ((Math.pow(i, 2)) / Math.pow(nTrapezi, 2))));
+        tartaruga.ruota(-90);
+    }
+    
+    for(let i = 0; i < arrayBasi.length; i++){
+        console.log(arrayBasi[i]);
+    }
+
+    // Calcolo PI Greco
+    
+    for(let i = 1; i < arrayBasi.length - 1; i++){
+        PIGreco += ((2*arrayBasi[i]));
+    }
+    PIGreco = PIGreco + 1; 
+    PIGreco /= (2*nTrapezi);
+    PIGreco = PIGreco * 4;
+    console.log(PIGreco);
+}
+
+function main(){
+    CalcoloPIGreco();
+}
+
+window.addEventListener('load', main);
+
+</script>
+</body>
+</html>
