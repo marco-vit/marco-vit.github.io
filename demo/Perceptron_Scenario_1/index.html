@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Raccolta Dati - Colori</title>
+    <style>
+        .container { 
+            text-align: center; margin-top: 50px; font-family: Arial, sans-serif; 
+        }
+        #colorBox {
+            width: 200px;
+            height: 200px;
+            margin: 20px auto;
+            border: 3px solid #333;
+            border-radius: 10px;
+        }
+        button {
+             padding: 10px 25px; font-size: 16px; cursor: pointer; margin: 5px; 
+            }
+        .btn-caldo { 
+            background-color: #ff4d4d; color: white; border: none; 
+        }
+        .btn-freddo {
+             background-color: #4da6ff; color: white; border: none; 
+            }
+        .btn-nonloso {
+             background-color: #000000; color: white; border: none; 
+            }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Scenario 1: Colori Caldi e Freddi</h2>
+        <div id="colorBox"></div> <p>Classifica questo colore:</p>
+        <button class="btn-caldo" onclick="sendData(0)">CALDO</button>
+        <button class="btn-freddo" onclick="sendData(1)">FREDDO</button>
+        <button class="btn-nonloso" onclick="sendData(2)">NON SO</button>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
